@@ -12,12 +12,10 @@ class UserProfileViewModel @Inject constructor(
 ) : ViewModel() {
     var userId: String = savedStateHandle["uid"]
             ?: throw IllegalArgumentException("Missing user ID")
-    private val _user = MutableLiveData<User>()
-    val user : LiveData<User> = _user
-
+    lateinit var user : LiveData<User>
     init {
         viewModelScope.launch {
-            _user.value = userRepository.getUser(userId)
+            user = userRepository.getUser(userId).asLiveData()
         }
     }
 }
